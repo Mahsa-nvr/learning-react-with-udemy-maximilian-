@@ -3,6 +3,8 @@ import './App.css';
 
 //components
 import Person from './persons/person'
+// import Testapi from './Test/Testapi';
+// import Home from './Test/Home';
 
 class App extends Component {
 
@@ -11,7 +13,8 @@ class App extends Component {
       {name: 'max', age: 28},
       {name: 'alex', age: 30},
       {name: 'alice', age: 33}
-    ]
+    ],
+    show: false
   }
 
   switchNameHandler = (newName) => {
@@ -22,6 +25,13 @@ class App extends Component {
         {name: 'mahsa', age: 29}
       ]
     })
+  }
+
+  deleteHandler = (personIndex) => {
+    // const persons = this.state.person.slice()
+    const persons = [...this.state.person];
+    persons.splice(personIndex , 1)
+    this.setState({persons : persons})
   }
 
 
@@ -35,22 +45,36 @@ class App extends Component {
     })
   }
 
+  switchToggle = () => {
+    this.setState({
+      show: !this.state.show
+    })
+  }
+
+ 
+
   render() {
+
+    let persons =null;
+    if (this.state.show) {
+      persons = (
+        <div>
+          {this.state.person.map((person, index) => {
+            return <Person
+            click={() => this.deleteHandler(index)}
+            name={person.name}
+            age={person.age}/>
+          })}
+     
+      </div>
+      )
+    }
     return (
       <div className="App">
         <h1>Hi, Im a React App</h1>
-        <button onClick={() => this.switchNameHandler('maximilannnnn')}>switch toggle</button>
-        <Person
-           name={this.state.person[0].name}
-           age={this.state.person[0].age}/>
-        <Person 
-           name={this.state.person[1].name}
-          age={this.state.person[1].age}
-          click={this.switchNameHandler.bind(this, 'max|||')}
-          changed={this.nameChangedHandler}>im children of one component</Person>
-        <Person
-         name={this.state.person[2].name} 
-         age={this.state.person[2].age}/>
+        {/* <Home /> */}
+        <button onClick={this.switchToggle}>switch toggle</button>
+       {persons}
       </div>
     )
     // return React.createElement('div', {className: 'App'} , React.createElement('h1', null, 'helloooo'))
