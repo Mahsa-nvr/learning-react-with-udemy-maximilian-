@@ -10,9 +10,9 @@ class App extends Component {
 
   state = {
     person : [
-      {name: 'max', age: 28},
-      {name: 'alex', age: 30},
-      {name: 'alice', age: 33}
+      {id: '1' ,name: 'max', age: 28},
+      {id: '2', name: 'alex', age: 30},
+      {id: '3' , name: 'alice', age: 33}
     ],
     show: false
   }
@@ -35,14 +35,28 @@ class App extends Component {
   }
 
 
-  nameChangedHandler = (event) => {
-    this.setState({
-      person : [
-        {name: 'babakkkkkkkkkkkkk', age: 28},
-        {name: event.target.value, age: 30},
-        {name: 'mahsa', age: 29}
-      ]
+  nameChangedHandler = (event, id) => {
+
+    const personIndex = this.state.person.findIndex(p => {
+
+      return p.id === id;
     })
+
+    const person = {
+      ...this.state.person[personIndex]
+    }
+    person.name = event.target.value;
+
+    const persons = [...this.state.person]
+    persons[personIndex]= person;
+    this.setState({person: persons})
+    // this.setState({
+    //   person : [
+    //     {name: 'babakkkkkkkkkkkkk', age: 28},
+    //     {name: event.target.value, age: 30},
+    //     {name: 'mahsa', age: 29}
+    //   ]
+    // })
   }
 
   switchToggle = () => {
@@ -63,7 +77,10 @@ class App extends Component {
             return <Person
             click={() => this.deleteHandler(index)}
             name={person.name}
-            age={person.age}/>
+            age={person.age}
+            key={index}
+            changed={(event) => this.nameChangedHandler(event, person.id)}
+            />
           })}
      
       </div>
